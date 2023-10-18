@@ -14,13 +14,20 @@ export default function TrackingScreen() {
     const [distance, setDistance] = useState(0);
     const [currentLocation, setCurrentLocation] = useState(null);
     const [route, setRoute] = useState([]);
+    const [hasFinished, setHasFinished] = useState(false);
+    const [hasEnded, setHasEnded] = useState(false);
+    const [finalSteps, setFinalSteps] = useState(0);  // Neue Zustände hinzugefügt
+    const [finalDistance, setFinalDistance] = useState(0);
     let _subscription = null;
     const _endProgram = () => {
       if (isTracking) {
-        _unsubscribe();  // Wenn es aktiv ist, stoppt das Tracking
+        _unsubscribe(); // Wenn Sie Tracking stoppen möchten, wenn "Beenden" gedrückt wird
       }
+      setHasFinished(true);
     };
-    
+
+    let locationSubscription = null;
+    let pedometerSubscription = null
   
     function haversine(lat1, lon1, lat2, lon2) {
       const R = 6371e3; 
@@ -102,72 +109,72 @@ export default function TrackingScreen() {
       setIsTracking(true);
       startTimer();
     };
-  
-    const _unsubscribe = () => {
+
+    const _endTracking = () => {
+      setFinalSteps(steps);   // Aktuelle Schritte im finalen Zustand speichern
+      setFinalDistance(distance);  // Aktuelle Distanz im finalen Zustand speichern
+      
       if (_subscription) {
         _subscription.remove();
         _subscription = null;
-      } else {
-        console.log('Versuch, sich abzumelden, aber es gibt kein aktives Abonnement.');
       }
       setIsTracking(false);
+      setHasEnded(true);
       stopTimer();
     };
     
     return (
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>StepandTrack</Text>
-          </View>
-          
-          <MapView
-            style={[styles.map, { marginTop: 50, marginHorizontal: 0 }]}  // Rand entfernen und Karte vergrössern
-            initialRegion={currentLocation ? {
-              latitude: currentLocation.latitude,
-              longitude: currentLocation.longitude,
-              latitudeDelta: 0.005,
-              longitudeDelta: 0.005,
-            } : undefined}
-            showsUserLocation={true}
-            followsUserLocation={true}
-          >
-            <Polyline coordinates={route} strokeWidth={3} />
-          </MapView>
-      
-          <View style={[styles.dataContainer, { marginVertical: 30 }]}>
-            <Text style={styles.dataText}>{steps} Schritte</Text>
-            <Text style={styles.dataText}>{elapsedTime} Sek.</Text>
-            <Text style={styles.dataText}>{distance.toFixed(2)} Meter</Text>
-          </View>
-      
-          <View style={styles.buttonContainer}>
-            {!isTracking && (
-              <>
-                <TouchableOpacity 
-                  style={styles.roundButton}
-                  onPress={_subscribe}
-                >
-                  <Text style={styles.buttonText}>Start</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={[styles.roundButton, styles.endButton]}
-                  onPress={_endProgram}
-                >
-                  <Text style={styles.buttonText}>Beenden</Text>
-                </TouchableOpacity>
-              </>
-            )}
-            {isTracking && (
-              <TouchableOpacity 
-                style={styles.roundButton}
-                onPress={_unsubscribe}
-              >
-                <Text style={styles.buttonText}>Pause</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>StepandTrack</Text>
         </View>
-      );
+    
+        <MapView
+          style={[styles.map, { marginTop: 50, marginHorizontal: 0 }]}
+          initialRegion={currentLocation ? {
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          } : undefined}
+          showsUserLocation={true}
+          followsUserLocation={true}
+        >
+          <Polyline coordinates={route} strokeWidth={3} />
+        </MapView>
+    
+        <View style={[styles.dataContainer, { marginVertical: 30 }]}>
+          {/* Schritte und Distanz entsprechend dem Tracking-Zustand anzeigen */}
+          <Text style={styles.dataText}>{hasEnded ? finalSteps : steps} Schritte</Text>
+          <Text style={styles.dataText}>{elapsedTime} Sek.</Text>
+          <Text style={styles.dataText}>{hasEnded ? finalDistance.toFixed(2) : distance.toFixed(2)} Meter</Text>
+        </View>
+    
+        <View style={styles.buttonContainer}>
+          {!isTracking && !hasEnded && (
+            <TouchableOpacity 
+              style={styles.roundButton}
+              onPress={_subscribe}
+            >
+              <Text style={styles.buttonText}>Start</Text>
+            </TouchableOpacity>
+          )}
+          {isTracking && (
+            <TouchableOpacity 
+              style={[styles.roundButton]}
+              onPress={_endTracking} 
+            >
+              <Text style={styles.buttonText}>Beenden</Text>
+            </TouchableOpacity>
+          )}
+          {hasEnded && (
+            <Text style={{ color: 'white', fontSize: 16, marginTop: 20 }}>
+              Bitte starten Sie eine neue Session.
+            </Text>
+          )}
+        </View>
+      </View>
+    );    
 }
 
 const styles = StyleSheet.create({
@@ -214,7 +221,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     endButton: {
-      marginLeft: 20,
     },
     buttonText: {
       color: 'white',
