@@ -1,20 +1,29 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Einführung
+StepandTrack ist eine mobile App, die dazu entwickelt wurde, Ihre Schritte zu zählen und Ihre Route in Echtzeit zu verfolgen. Es ist das perfekte Tool für alle, die ihre körperliche Aktivität überwachen und dokumentieren möchten.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Anleitung
+Voraussetzungen:
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Stellen Sie sicher, dass Sie Node.js und npm auf Ihrem Computer installiert haben. Falls nicht, besuchen Sie nodejs.org und laden Sie die aktuellste Version herunter.
+Installieren Sie Expo CLI durch den Befehl: npm install -g expo-cli
+Erhalt des "StepandTrack"-Ordners:
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+Sie sollten das Repository clonen. Dieser Ordner enthält alle notwendigen Dateien zur Ausführung der App.
+Start der Applikation:
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+Navigieren Sie zum "MobileApp"-Ordner.
+Öffnen Sie die Kommandozeile oder das Terminal und navigieren Sie zu diesem Pfad.
+Führen Sie den Befehl npm install aus, um alle benötigten Abhängigkeiten zu installieren.
+Starten Sie die App mit dem Befehl npx expo start. Sollte dies nicht funktionieren, installieren Sie das Tunnel-Paket und starten Sie die App mit npx expo start --tunnel. Ein QR-Code wird angezeigt.
+Installieren Sie die Expo Go App auf Ihrem Mobilgerät und registrieren Sie sich.
+Scannen Sie den QR-Code mit der Expo Go App oder mit der Kamera auf Ihrem Mobilgerät, um die App auszuführen.
+Nutzung der App:
+
+Beim ersten Start werden Sie aufgefordert, eine neue Session zu erstellen.
+Geben Sie einen Namen für die Session ein und klicken Sie auf "Start".
+Die App beginnt nun mit dem Tracking. Sie können anfangen, Ihre Schritte zu zählen und Ihren Standort zu verfolgen.
+Empfehlungen für die optimale Nutzung:
+
+Für die beste Erfahrung, verwenden Sie die App draußen und über längere Strecken.
+Es kann ein paar Sekunden dauern, bis die Meter aktualisiert werden.
+Lassen Sie während der Nutzung das Terminal offen und aktiv.
